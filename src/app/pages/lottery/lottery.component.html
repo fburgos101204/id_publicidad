@@ -1,0 +1,406 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <ng-template #crearLottery let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Crear nueva {{titleTwo}}</h4>
+        </div>
+        <div class="modal-body">
+
+            <div *ngIf="errorFormSave" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <form #createLottery="ngForm" (ngSubmit)="createLotteryFunction(createLottery.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Logo">Logo</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFileLang" lang="en">
+                            <label class="custom-file-label" for="customFileLang">Seleccionar imagen</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Nombre">Nombre</label>
+                        <div class="input-group">
+                            <input type="text" ngModel #lotteryName id="lotteryName" class="form-control"
+                                placeholder="Nombre de la loteria" name="lotteryName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Hora de Apertura">Hora de Apertura</label>
+                        <div class="input-group">
+                            <input type="time" #horaApertura ngModel id="horaApertura" class="form-control"
+                            placeholder="Hora de Apertura" name="horaApertura">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Hora de Cierre">Hora de Cierre</label>
+                        <div class="input-group">
+                            <input type="time" ngModel #horaCierre id="horaCierre" class="form-control"
+                            placeholder="Hora de Cierre" name="horaCierre">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #insertWinners let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Insertar ganadores</h4>
+        </div>
+        <div class="modal-body">
+
+            <div *ngIf="errorFormSave" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--(ngSubmit)="createWinnersFunction(createLottery.value);"--->
+            <form #createWinners="ngForm" class="form-primary"
+                autocomplete="off" (ngSubmit)="createWinnersFunction(createWinners.value);">
+                <div class="row">
+                    <div class="col">
+                        <label for="Loterias">Loterias</label>
+                        <div class="input-group">
+                            <select ngModel #lotteryName id="lotteryNameWinner" class="form-control"
+                            placeholder="Nombre de la loteria" name="lotteryNameWinner">
+                              <option selected>Seleccionar</option>
+                              <option *ngFor="let item of dataToShow" value="{{item.id}}">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Primer premio">Primer premio</label>
+                        <div class="input-group">
+                            <input type="text" #primerPremio ngModel 
+                            id="primerPremio" class="form-control"
+                            placeholder="Primer premio" name="primerPremio"
+                            maxlength="2"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Segundo Premio">Segundo Premio</label>
+                        <div class="input-group">
+                            <input type="text" ngModel #segundoPremio 
+                            id="segundoPremio" class="form-control"
+                            placeholder="Segundo Premio" name="segundoPremio"
+                            maxlength="2"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Tercer Premio">Tercer Premio</label>
+                        <div class="input-group">
+                            <input type="text" ngModel #tercerPremio 
+                            id="tercerPremio" class="form-control"
+                            placeholder="Tercer premio" name="tercerPremio"
+                            maxlength="2"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Primer premio">Fecha</label>
+                        <div class="input-group">
+                            <input type="date"
+                            id="fecha" class="form-control"
+                            placeholder="Fecha" name="fecha">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Primer premio">Metodo</label>
+                        <div class="input-group">
+                            <select  id="ti" class="form-control" name="ti">
+                              <option selected>Manual</option>
+                              <option>Scrapping</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #editLottery let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar {{titleTwo}}</h4>
+        </div>
+        <div class="modal-body">
+
+            <div *ngIf="errorFormSave" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col" style="display: flex;justify-content: center;">
+                    <img src="{{customFileLang}}"/>
+                </div>
+            </div>
+            <form #editLotteryi="ngForm" (ngSubmit)="editLotteryFunction(editLotteryi.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Logo">Logo</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFileLang" lang="en">
+                            <label class="custom-file-label" for="customFileLang">Seleccionar imagen</label>
+                            <input type="hidden" name="lotteryid" id="lotteryid" value="{{lotteryid}}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Nombre">Nombre</label>
+                        <div class="input-group">
+                            <input type="text" id="lotteryNameEdit" class="form-control"
+                                placeholder="Nombre de la loteria" name="lotteryNameEdit" value="{{lotteryNameEdit}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Hora de Apertura">Hora de Apertura 
+                            <!---{{horaAperturaEdit | date:'hh:mm a'}}-->
+                        </label>
+                        <div class="input-group">
+                            <input type="time" id="horaAperturaEdit" class="form-control"
+                            placeholder="Hora de Apertura" name="horaAperturaEdit" value="{{horaAperturaEdit | date:'hh:mm'}}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Hora de Cierre">Hora de Cierre</label>
+                        <div class="input-group">
+                            <input type="time"  id="horaCierreEdit" class="form-control"
+                            placeholder="Hora de Cierre" name="horaCierreEdit" value="{{horaCierreEdit | date:'hh:mm'}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #typeJugadaPay let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Tipo de jugadas</h4>
+            <p style="float: left;
+            margin: 0;
+            position: absolute;
+            margin-top: 20px;">Detalle de pago de {{ namelotterySet }}</p>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="errorFormSave" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form #payLottery="ngForm" (ngSubmit)="savdPayLottery(payLottery.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Quiniela">Quiniela</label>
+                        <div class="input-group">
+                            <input type="number" id="quiniela" class="form-control" [(ngModel)]="quinielaPay"
+                                placeholder="Cuanto paga por quiniela" name="quiniela">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="pale">Pale</label>
+                        <div class="input-group">
+                            <input type="number" id="pale" class="form-control" [(ngModel)]="palePay"
+                                placeholder="Cuanto paga por pale" name="pale">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="tripleta">Tripleta</label>
+                        <div class="input-group">
+                            <input type="number" id="tripleta" class="form-control" [(ngModel)]="tripletaPay"
+                                placeholder="Cuanto paga por tripleta" name="tripleta">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Super pale">Super pale</label>
+                        <div class="input-group">
+                            <input type="number" id="superPale" class="form-control" [(ngModel)]="superPalePay"
+                                placeholder="Cuanto paga por super pale" name="superPale">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="lotteryBlockId" [(ngModel)]="lotteryBlockId" name="lotteryBlockId">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #typeJugadaBlock let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Tipo de jugadas</h4>
+            <p style="float: left;
+            margin: 0;
+            position: absolute;
+            margin-top: 20px;">Limite de {{ namelotterySet }}</p>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="errorFormSave" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form #BlockLottery="ngForm" (ngSubmit)="savdBloqueoLottery(BlockLottery.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Quiniela">Quiniela</label>
+                        <div class="input-group">
+                            <input type="number" id="quiniela" class="form-control" [(ngModel)]="quinielaBb"
+                                placeholder="Bloqueo por quiniela" name="quiniela2">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="pale">Pale</label>
+                        <div class="input-group">
+                            <input type="number" id="pale" class="form-control" [(ngModel)]="paleBb"
+                                placeholder="Bloqueo por pale" name="pale2">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="tripleta">Tripleta</label>
+                        <div class="input-group">
+                            <input type="number" id="tripleta" class="form-control" [(ngModel)]="tripletaBb"
+                                placeholder="Bloqueo por tripleta" name="tripleta2">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Super pale">Super pale</label>
+                        <div class="input-group">
+                            <input type="number" id="superPale" class="form-control" [(ngModel)]="superPaleBb"
+                                placeholder="Bloqueo por super pale" name="superPale2">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="lotteryBlockId" [(ngModel)]="lotteryBlockId" name="lotteryBlockId">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <!-- <h3 class="mb-0">Listado de {{titleTwo}}</h3> -->
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">Listado de {{titleTwo}}</h3>
+                        </div>
+                        <div class="col">
+                            <!--<button class="btn btn-info" (click)="open(insertWinners)" style="float: right;">Insertar Ganadores</button>
+                            <button class="btn btn-primary" (click)="open(crearLottery)" style="float: right;margin-right: 15px;">Crear
+                                {{titleTwo}}</button>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="tableLottery">
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th>Nombre</th>
+                                <th>Apertura</th>
+                                <th>Cierre</th>
+                                <th>#1</th>
+                                <th>#2</th>
+                                <th>#3</th>
+                                <th>Estado</th>
+                                <th>Fecha de números</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dataToShow">
+                                <td><img src="{{ item.logo }}" style="width: 75px;" /></td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.open_time | date:'shortTime':'UTC' }}</td>
+                                <td>{{ item.closed_time | date:'shortTime':'UTC' }}</td>
+                                <td class="text-green" style="font-weight: bold;">{{ formatCero(item.numberOne) }}</td>
+                                <td class="text-green" style="font-weight: bold;">{{ formatCero(item.numberTwo) }}</td>
+                                <td class="text-green" style="font-weight: bold;">{{ formatCero(item.numberThreee) }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" *ngIf="item.active === true; else inactiveSection"
+                                        style="background-color: #30c39e;border-color: #30c39e;">Activo</a>
+                                    <ng-template #inactiveSection>
+                                        <a class="btn btn-sm btn-primary" *ngIf="item.active === false"
+                                            style="background-color: #f5365c;border-color: #f5365c;">Inactiva</a>
+                                    </ng-template>
+                                </td>
+                                <td>{{ item.dateWinners | date }}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-icon btn-sm" (click)="desactivarLoteria(item.id, item.active)">
+                                        <i class="nav-icon fas fa-power-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

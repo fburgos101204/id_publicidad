@@ -1,0 +1,187 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <ng-template #crearLocalidad let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Crear nueva localidad</h4>
+        </div>
+        <div class="modal-body">
+
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <form #createUser="ngForm" (ngSubmit)="createLocationFunction(createUser.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Localidad">Localidad</label>
+                        <div class="input-group">
+                            <input type="text" pattern="^[a-zA-Z]+$" ngModel #localidad id="localidad" class="form-control" placeholder="Nombre de la localidad" 
+                            (keypress)="stringOnly($event)" name="localidad">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Representante">Representante</label>
+                        <div class="input-group">
+                            <input type="text" pattern="^[a-zA-Z]+$" 
+                            (keypress)="stringOnly($event)" ngModel #representante id="representante" class="form-control"
+                             placeholder="Apellido" name="representante">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Teléfono">Teléfono</label>
+                        <div class="input-group">
+                            <input type="text" #phoneNumber ngModel id="phoneNumber" class="form-control"
+                                placeholder="Número de teléfono" name="phoneNumber" maxlength="10"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Direccion">Direccion</label>
+                        <div class="input-group">
+                            <input type="text" ngModel #direccion id="direccion" class="form-control"
+                                placeholder="Direccion" name="direccion">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #editarLocalidad let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar usuario</h4>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form #editarUsers="ngForm" (ngSubmit)="editLocation(editarUsers.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Localidad">Localidad</label>
+                        <div class="input-group">
+                            <input type="text" id="localidadEdit" class="form-control" placeholder="Localidad"
+                                name="localidadEdit" [(ngModel)]="localidadEdit" pattern="^[a-zA-Z]+$" (keypress)="stringOnly($event)" >
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Representante">Representante</label>
+                        <div class="input-group">
+                            <input type="text" id="representanteEdit" class="form-control" [(ngModel)]="representanteEdit"
+                                placeholder="Representante" name="representanteEdit" pattern="^[a-zA-Z]+$" (keypress)="stringOnly($event)" >
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Teléfono">Teléfono</label>
+                        <div class="input-group">
+                            <input type="text" [(ngModel)]="phoneNumberEdit" id="phoneNumberEdit" class="form-control"
+                                placeholder="Número de teléfono" name="phoneNumberEdit" maxlength="10"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Direccion">Direccion</label>
+                        <div class="input-group">
+                            <input type="text" [(ngModel)]="direccionEdit" id="direccionEdit" class="form-control"
+                                placeholder="Direccion" name="direccionEdit">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+    
+    <!-- Table 
+    https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <!-- <h3 class="mb-0">Listado de {{titleTwo}}</h3> -->
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">Listado de {{titleTwo}}</h3>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" (click)="open(crearLocalidad)" style="float: right;">Crear
+                                {{titleTwo}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="tableLocation">
+                        <thead>
+                            <tr>
+                                <th>Localidad</th>
+                                <th>Estado</th>
+                                <th>Direccion</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dataToShow">
+                                <td>{{ item.localidad }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" *ngIf="item.estado=== 1; else inactiveSection"
+                                        style="background-color: #30c39e;border-color: #30c39e;">Activo</a>
+                                    <ng-template #inactiveSection>
+                                        <a class="btn btn-sm btn-primary" *ngIf="item.estado === 2"
+                                            style="background-color: #f5365c;border-color: #f5365c;">Inactiva</a>
+                                    </ng-template>
+                                </td>
+                                <td>{{ item.direccion }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-icon btn-sm" (click)="open(editarLocalidad);refillEditUser(item)"
+                                        style="color:white;" style="margin-right: 15px;">
+                                        <i class="nav-icon fas fa-pen"></i>
+                                    </button>
+                                    
+                                    <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.estado=== 1; else inactiveSection2"
+                                     (click)="localidadDisabled(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    </button>
+                                    <ng-template #inactiveSection2>
+                                        <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.estado === 2"
+                                     (click)="localidadActive(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    </button>
+                                    </ng-template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+::ng-deep .dataTables_wrapper .dataTables_length,
+::ng-deep .dataTables_wrapper .dataTables_filter,
+::ng-deep .dataTables_wrapper .dataTables_info,
+::ng-deep .dataTables_wrapper .dataTables_processing,
+::ng-deep .dataTables_wrapper .dataTables_paginate {
+  color: #525f7f;
+  font-family: Open Sans, sans-serif !important;
+  font-size: 0.8125rem !important;
+}
+
+::ng-deep ngb-modal-backdrop {
+    z-index: 100 !important;
+}
