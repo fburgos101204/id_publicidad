@@ -1,0 +1,282 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <ng-template #crearUser let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Crear nuevo usuario</h4>
+        </div>
+        <div class="modal-body">
+
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <form #createUser="ngForm" (ngSubmit)="createUserFunction(createUser.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Nombre">Nombre</label>
+                        <div class="input-group">
+                            <input type="text" pattern="^[a-zA-Z]+$" ngModel #name id="name" class="form-control" placeholder="Nombre" 
+                            (keypress)="stringOnly($event)" name="name">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Apellido">Apellido</label>
+                        <div class="input-group">
+                            <input type="text" pattern="^[a-zA-Z]+$" 
+                            (keypress)="stringOnly($event)" ngModel #lastName id="lastName" class="form-control"
+                             placeholder="Apellido" name="lastName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <!--<div class="col">
+                        <label for="Teléfono">Teléfono</label>
+                        <div class="input-group">
+                            <input type="text" #phoneNumber ngModel id="phoneNumber" class="form-control"
+                                placeholder="Número de teléfono" name="phoneNumber" maxlength="10"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                    </div>-->
+                    <div class="col">
+                        <label for="correo electrónico">Correo electrónico</label>
+                        <div class="input-group">
+                            <input type="email" ngModel #email id="email" class="form-control"
+                                placeholder="example@example.com" name="email">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Teléfono">Nombre de usuario</label>
+                        <div class="input-group">
+                            <input type="text" ngModel #Username id="Username" class="form-control"
+                                placeholder="Nombre de usuario" name="Username" >
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="correo electrónico">Rol</label>
+                        <div class="input-group">
+                            <select  id="rol" class="form-control" ngModel #rol name="rol">
+                                <option value = '2' selected>Supervisor</option>
+                                <option value = '2'>Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Contraseña">Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" ngModel #password id="password" class="form-control" placeholder=""
+                                name="password">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Repetir Contraseña">Repetir Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" ngModel #Repetpass id="Repetpass" class="form-control" placeholder="" name="Repetpass">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #editarUser let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar usuario</h4>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form #editarUsers="ngForm" (ngSubmit)="editUserManager(editarUsers.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Nombre">Nombre</label>
+                        <div class="input-group">
+                            <input type="text" id="nameEdit" class="form-control" placeholder="Nombre"
+                                name="nameEdit" [(ngModel)]="nameEdit" pattern="^[a-zA-Z]+$" (keypress)="stringOnly($event)" >
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Apellido">Apellido</label>
+                        <div class="input-group">
+                            <input type="text" id="lastNameEdit" class="form-control" [(ngModel)]="lastNameEditSet"
+                                placeholder="Apellido" name="lastNameEdit" pattern="^[a-zA-Z]+$" (keypress)="stringOnly($event)" >
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="correo electrónico">Correo electrónico</label>
+                        <div class="input-group">
+                            <input type="text" id="emailEdit" class="form-control"
+                                placeholder="example@example.com" name="emailEdit"
+                                [(ngModel)]="emailEditSet">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Teléfono">Nombre de usuario</label>
+                        <div class="input-group">
+                            <input type="text" id="UsernameEdit" class="form-control"
+                                placeholder="Nombre de usuario" name="UsernameEdit"
+                                [(ngModel)]="usernameEditSet">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="correo electrónico">Rol</label>
+                        <div class="input-group">
+                            <select  id="rol" class="form-control" name="rolEdit" value="2">
+                                <option value = '2' selected>Supervisor</option>
+                                <option value = '2'>Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+    
+    <ng-template #editarPassw let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar Contraseña</h4>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form #editarPassw="ngForm" (ngSubmit)="editPasswordManager(editarPassw.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Nombre">Nueva contraseña</label>
+                        <div class="input-group">
+                            <input type="password" id="passwordEdit" ngModel #passwordEdit class="form-control" 
+                            placeholder="Nueva contraseña" name="passwordEdit">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Apellido">Repetir contraseña </label>
+                        <div class="input-group">
+                            <input type="password" id="passwordEditTwo" ngModel #passwordEditTwo class="form-control"
+                                placeholder="Repetir contraseña" name="passwordEditTwo">
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="phoneEe" class="form-control" name="phoneEe" [(ngModel)]="phoneEditPass">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+
+    <!-- Table 
+    https://www.w3schools.com/icons/fontawesome5_icons_users_people.asp -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <!-- <h3 class="mb-0">Listado de {{titleTwo}}</h3> -->
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">Listado de {{titleTwo}}</h3>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" (click)="open(crearUser)" style="float: right;">Crear
+                                {{titleTwo}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="tableUser">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of userListDtoModel">
+                                <td>{{ item.name }} {{item.lastName}}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" *ngIf="item.active === 1; else inactiveSection"
+                                        style="background-color: #30c39e;border-color: #30c39e;">Activo</a>
+                                    <ng-template #inactiveSection>
+                                        <a class="btn btn-sm btn-primary" *ngIf="item.active === 2"
+                                            style="background-color: #f5365c;border-color: #f5365c;">Inactiva</a>
+                                    </ng-template>
+                                </td>
+                                <td>{{ item.createdDate | date }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-icon btn-sm" (click)="open(editarUser);refillEditUser(item)"
+                                        style="color:white;" style="margin-right: 15px;">
+                                        <i class="nav-icon fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-icon btn-sm" (click)="open(editarPassw);setPhone(item.email)"
+                                        style="color:white;" style="margin-right: 15px;">
+                                        <i class="nav-icon fas fa-user-lock"></i>
+                                    </button>
+                                    
+                                    <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.active === 1; else inactiveSection2"
+                                     (click)="userDisabled(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    </button>
+                                    <ng-template #inactiveSection2>
+                                        <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.active === 2"
+                                     (click)="userActive(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    </button>
+                                    </ng-template>
+
+                                    <button class="btn btn-danger btn-icon btn-sm" (click)="deleteUserManager(item.id)">
+                                        <i class="nav-icon 	fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

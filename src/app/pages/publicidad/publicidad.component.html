@@ -1,0 +1,188 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <ng-template #crearPublicidad let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Crear nueva publicidad</h4>
+        </div>
+        <div class="modal-body">
+
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <form #createPublic="ngForm" (ngSubmit)="createPublicidad(createPublic.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Foto">Foto</label>
+                        <div class="input-group">
+                            <input type="file"  ngModel #foto id="foto" class="form-control" placeholder="Foto" 
+                            name="foto">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Localidad">Localidad</label>
+                        <div class="input-group">
+                            <select ngModel #localidad id="localidad" class="form-control" name="localidad">
+                              <option selected>Seleccionar</option>
+                              <option *ngFor="let item of dataToShowLoc" value="{{item.id}}">{{item.localidad}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Fecha Inicio">Fecha Inicio</label>
+                        <div class="input-group">
+                            <input type="date" ngModel #fechaInicio id="fechaInicio" class="form-control"
+                            name="fechaInicio">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Fecha Fin">Fecha Fin</label>
+                        <div class="input-group">
+                            <input type="date" ngModel #fechaFin id="fechaFin" class="form-control"
+                            name="fechaFin" >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #editarPublicidad let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar publicidad</h4>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="errorFormSaveUser" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text" id="setErrorText">{{errorMessageForm}}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form #editarPublic="ngForm" (ngSubmit)="editPublicidad(editarPublic.value);" class="form-primary"
+                autocomplete="off">
+                <div class="row">
+                    <div class="col">
+                        <label for="Foto">Foto</label>
+                        <div class="input-group">
+                            <input type="file" id="fotoEdit" class="form-control" placeholder="fotoEdit"
+                                name="fotoEdit" [(ngModel)]="fotoEdit">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Localidad">Localidad</label>
+                        <div class="input-group">
+                            <select ngModel #localidadEdit id="localidadEdit" class="form-control" name="localidadEdit">
+                              <option selected>Seleccionar</option>
+                              <option *ngFor="let item of dataToShowLoc" value="{{item.id}}">{{item.localidad}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Fecha Inicio">Fecha Inicio</label>
+                        <div class="input-group">
+                            <input type="date" id="fechaInicioEdit" class="form-control"
+                            name="fechaInicioEdit" [(ngModel)]="fechaInicioEdit">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="Fecha fin">Fecha Fin</label>
+                        <div class="input-group">
+                            <<input type="date" id="fechaFinEdit" class="form-control"
+                            name="fechaFinEdit" [(ngModel)]="fechaFinEdit">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger closeModal"
+                        (click)="modal.close('close click')">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-floppy-disk"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <!--<div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">Listado de {{titleTwo}}</h3>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" (click)="open(crearPublicidad)" style="float: right;">Crear {{titleTwo}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="tableUser">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of userListDtoModel">
+                                <td>{{ item.name }} {{item.lastName}}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" *ngIf="item.active === 1; else inactiveSection"
+                                        style="background-color: #30c39e;border-color: #30c39e;">Activo</a>
+                                    <ng-template #inactiveSection>
+                                        <a class="btn btn-sm btn-primary" *ngIf="item.active === 2"
+                                            style="background-color: #f5365c;border-color: #f5365c;">Inactiva</a>
+                                    </ng-template>
+                                </td>
+                                <td>{{ item.createdDate | date }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-icon btn-sm" (click)="open(editarPublicidad);refillEditUser(item)"
+                                        style="color:white;" style="margin-right: 15px;">
+                                        <i class="nav-icon fas fa-pen"></i>
+                                    </button>
+
+                                    <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.active === 1; else inactiveSection2"
+                                     (click)="publicidadDisabled(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    </button>
+                                    <ng-template #inactiveSection2>
+                                        <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.active === 2"
+                                     (click)="publicidadActive(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    </button>
+                                    </ng-template>
+
+                                    <button class="btn btn-danger btn-icon btn-sm" (click)="deleteUserManager(item.id)">
+                                        <i class="nav-icon 	fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>-->
+</div>

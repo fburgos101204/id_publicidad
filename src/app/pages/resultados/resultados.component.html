@@ -1,0 +1,67 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">Resultados de hoy {{dataDateScrapping | convertFrom24To12Format }}</h3>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" (click)="generateScrapping()" style="float: right;">Ejecutar Scrapping</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="tableMonitoreo9898">
+                        <thead>
+                            <tr>
+                                <th>Lotería</th>
+                                <th>#1</th>
+                                <th>#2</th>
+                                <th>#3</th>
+                                <th>Hora</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dataToShow">
+                                <th scope="row">
+                                    <div class="media align-items-center">
+                                        <a class="avatar rounded-circle mr-3"
+                                            style="background-color: white;border: 2px solid #faa716;">
+                                            <img alt="Image placeholder" src="{{ item.logo }}">
+                                        </a>
+                                        <div class="media-body">
+                                            <span class="mb-0 text-sm">{{ item.name }}</span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td>{{ formatCero(item.numberOne) }}</td>
+                                <td>{{ formatCero(item.numberTwo )}}</td>
+                                <td>{{ formatCero(item.numberThreee) }}</td>
+                                <td>{{ item.closed_time |  date:'shortTime':'UTC'}}</td>
+                                <td>{{ item.date | date }}</td>
+                            </tr>
+                        </tbody>
+                        <!--<tbody>
+                            <tr *ngFor="let item of dataToShow">
+                                <th >{{ item.loteria }}</th>
+                                <td>{{ item.numeros.todosNumeros }}</td>
+                                <td>{{ item.fecha }}</td>
+                            </tr>
+                        </tbody>--->
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
