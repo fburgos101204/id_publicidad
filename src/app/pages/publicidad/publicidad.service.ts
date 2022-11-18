@@ -23,9 +23,9 @@ export class PublicidadService {
   constructor(
     private http: HttpClient
   ) { }
-  
+
   // Listado de publicidad (ready)
-  publicidadList(){
+  publicidadList() {
     return this.http.get(this.apiUrl + '/publicidad/list', {
       headers: {
         token: this.localToken,
@@ -35,8 +35,8 @@ export class PublicidadService {
   }
 
   // Desactivar publicidad (ready)
-  publicidadDisabled(id: number){
-    return this.http.put(this.apiUrl + '/publicidad/disabled/'+id, {
+  publicidadDisabled(id: number) {
+    return this.http.put(this.apiUrl + '/publicidad/disabled/' + id, {
       headers: {
         token: this.localToken,
         Authorization: this.basicAuthorizationSet
@@ -45,8 +45,8 @@ export class PublicidadService {
   }
 
   // Activar publicidad (ready)
-  publicidadActive(id: number){
-    return this.http.put(this.apiUrl + '/publicidad/enabled/'+id, {
+  publicidadActive(id: number) {
+    return this.http.put(this.apiUrl + '/publicidad/enabled/' + id, {
       headers: {
         token: this.localToken,
         Authorization: this.basicAuthorizationSet
@@ -55,16 +55,18 @@ export class PublicidadService {
   }
 
   // Crear una publicidad (Ready)
-  createPublicidad(formData: any){
-    console.log(formData[0])
+  createPublicidad(formData: any) {
+    console.log('Objeto de creacion: ', formData)
     let value = this.http.post(
-      this.apiUrl + '/users/add',
+      this.apiUrl + '/publicidad/add',
       {
-        nombre: formData.name,
-        apellido: formData.lastName,
-        password: formData.password,
-        correo: formData.email,
-        username: formData.Username
+        foto: formData.foto,
+        id_localidad: formData.localidad,
+        fecha_creacion: new Date(),
+        fecha_inicio: formData.fechaInicio,
+        fecha_vencimiento: formData.fechaFin,
+        loop: formData.loop,
+        usuario_created: localStorage.getItem('nombreCliente')
       },
       {
         headers: {
@@ -77,15 +79,17 @@ export class PublicidadService {
   }
 
   // Editar una publicidad (Ready)
-  editPublicidad(formData: any){
-    console.log(formData[0])
+  editPublicidad(formData: any) {
+    console.log('llego al edit: ', formData)
     let value = this.http.put(
-      this.apiUrl + '/users/edit/manager',
+      this.apiUrl + '/publicidad/update',
       {
-        nombre: formData.nameEdit,
-        apellido: formData.lastNameEdit,
-        correo: formData.emailEdit,
-        username: formData.UsernameEdit
+        id: formData.id,
+        foto: formData.fotoEdit,
+        id_localidad: formData.localidadEdit,
+        fecha_inicio: formData.fechaInicioEdit,
+        loop: formData.loope,
+        fecha_vencimiento: formData.fechaFinEdit,
       },
       {
         headers: {
@@ -98,7 +102,7 @@ export class PublicidadService {
   }
 
   // Todas las localidades (Ready)
-  listLocalidad(){
+  listLocalidad() {
     return this.http.get(this.apiUrl + '/location/list', {
       headers: {
         token: this.localToken,
@@ -107,13 +111,13 @@ export class PublicidadService {
     })
   }
 
-  /*deletePublicidad(id: number){
-    return this.http.delete(this.apiUrl + '/users/manager/delete/'+id, {
+  deletePublicidad(id: number) {
+    return this.http.delete(this.apiUrl + '/publicidad/delete/' + id, {
       headers: {
         token: this.localToken,
         Authorization: this.basicAuthorizationSet
       }
     })
-  }*/
+  }
 
 }

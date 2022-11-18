@@ -25,16 +25,17 @@
                     <div class="col">
                         <label for="Foto">Foto</label>
                         <div class="input-group">
-                            <input type="file"  ngModel #foto id="foto" class="form-control" placeholder="Foto" 
-                            name="foto">
+                            <input type="file" ngModel #foto id="foto" class="form-control" placeholder="Foto"
+                                name="foto">
                         </div>
                     </div>
                     <div class="col">
                         <label for="Localidad">Localidad</label>
                         <div class="input-group">
                             <select ngModel #localidad id="localidad" class="form-control" name="localidad">
-                              <option selected>Seleccionar</option>
-                              <option *ngFor="let item of dataToShowLoc" value="{{item.id}}">{{item.localidad}}</option>
+                                <option selected>Seleccionar</option>
+                                <option *ngFor="let item of localityList" value="{{item.id}}">{{item.localidad}}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -44,14 +45,22 @@
                         <label for="Fecha Inicio">Fecha Inicio</label>
                         <div class="input-group">
                             <input type="date" ngModel #fechaInicio id="fechaInicio" class="form-control"
-                            name="fechaInicio">
+                                name="fechaInicio">
                         </div>
                     </div>
                     <div class="col">
                         <label for="Fecha Fin">Fecha Fin</label>
                         <div class="input-group">
-                            <input type="date" ngModel #fechaFin id="fechaFin" class="form-control"
-                            name="fechaFin" >
+                            <input type="date" ngModel #fechaFin id="fechaFin" class="form-control" name="fechaFin">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Loop">loop</label>
+                        <div class="input-group">
+                            <input type="number" ngModel #loop id="loop" class="form-control"
+                                name="loop">
                         </div>
                     </div>
                 </div>
@@ -83,16 +92,16 @@
                     <div class="col">
                         <label for="Foto">Foto</label>
                         <div class="input-group">
-                            <input type="file" id="fotoEdit" class="form-control" placeholder="fotoEdit"
-                                name="fotoEdit" [(ngModel)]="fotoEdit">
+                            <input type="file" id="fotoEdit" class="form-control" placeholder="fotoEdit" name="fotoEdit">
                         </div>
                     </div>
                     <div class="col">
                         <label for="Localidad">Localidad</label>
                         <div class="input-group">
-                            <select ngModel #localidadEdit id="localidadEdit" class="form-control" name="localidadEdit">
-                              <option selected>Seleccionar</option>
-                              <option *ngFor="let item of dataToShowLoc" value="{{item.id}}">{{item.localidad}}</option>
+                            <select ngModel #localidadEdit id="localidadEdit" class="form-control" name="localidadEdit" [(ngModel)]="localidadEditId">
+                                <option selected>Seleccionar</option>
+                                <option *ngFor="let item of localityList" value="{{item.id}}">{{item.localidad}}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -101,15 +110,24 @@
                     <div class="col">
                         <label for="Fecha Inicio">Fecha Inicio</label>
                         <div class="input-group">
-                            <input type="date" id="fechaInicioEdit" class="form-control"
-                            name="fechaInicioEdit" [(ngModel)]="fechaInicioEdit">
+                            <input type="date" id="fechaInicioEdit" class="form-control" name="fechaInicioEdit"
+                                [(ngModel)]="fechaInicioEdit">
                         </div>
                     </div>
                     <div class="col">
                         <label for="Fecha fin">Fecha Fin</label>
                         <div class="input-group">
-                            <<input type="date" id="fechaFinEdit" class="form-control"
-                            name="fechaFinEdit" [(ngModel)]="fechaFinEdit">
+                            <input type="date" id="fechaFinEdit" class="form-control" name="fechaFinEdit"
+                                [(ngModel)]="fechaFinEdit">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col">
+                        <label for="Loop">loop</label>
+                        <div class="input-group">
+                            <input type="number" ngModel #loope id="loope" class="form-control"
+                                name="loope" [(ngModel)]="loop">
                         </div>
                     </div>
                 </div>
@@ -124,7 +142,8 @@
         </div>
     </ng-template>
 
-    <!--<div class="row">
+
+    <div class="row">
         <div class="col">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
@@ -133,7 +152,8 @@
                             <h3 class="mb-0">Listado de {{titleTwo}}</h3>
                         </div>
                         <div class="col">
-                            <button class="btn btn-primary" (click)="open(crearPublicidad)" style="float: right;">Crear {{titleTwo}}</button>
+                            <button class="btn btn-primary" (click)="open(crearPublicidad)" style="float: right;">Crear
+                                {{titleTwo}}</button>
                         </div>
                     </div>
                 </div>
@@ -141,40 +161,46 @@
                     <table class="table table-bordered table-hover" id="tableUser">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
-                                <th>Estado</th>
-                                <th>Fecha</th>
+                                <th>id</th>
+                                <th>id_localidad</th>
+                                <th>foto</th>
+                                <th>fecha_inicio</th>
+                                <th>fecha_vencimiento</th>
+                                <th>fecha_creacion</th>
+                                <th>estado</th>
+                                <th>loope</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of userListDtoModel">
-                                <td>{{ item.name }} {{item.lastName}}</td>
+                            <tr *ngFor="let item of publicityList">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.id_localidad }}</td>
+                                <td>{{ item.foto }}</td>
+                                <td>{{ item.fecha_inicio | date }}</td>
+                                <td>{{ item.fecha_vencimiento | date  }}</td>
+                                <td>{{ item.fecha_creacion | date  }}</td>
+                                <td>{{ item.estado === 1 ? 'activo': 'inactivo' }}</td>
+                                <td>{{ item.loope }}</td>
                                 <td>
-                                    <a class="btn btn-sm btn-primary" *ngIf="item.active === 1; else inactiveSection"
-                                        style="background-color: #30c39e;border-color: #30c39e;">Activo</a>
-                                    <ng-template #inactiveSection>
-                                        <a class="btn btn-sm btn-primary" *ngIf="item.active === 2"
-                                            style="background-color: #f5365c;border-color: #f5365c;">Inactiva</a>
-                                    </ng-template>
-                                </td>
-                                <td>{{ item.createdDate | date }}</td>
-                                <td>
-                                    <button class="btn btn-warning btn-icon btn-sm" (click)="open(editarPublicidad);refillEditUser(item)"
-                                        style="color:white;" style="margin-right: 15px;">
+                                    <button class="btn btn-warning btn-icon btn-sm"
+                                        (click)="open(editarPublicidad);refillEditPublicity(item)" style="color:white;"
+                                        style="margin-right: 15px;">
                                         <i class="nav-icon fas fa-pen"></i>
                                     </button>
 
-                                    <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.active === 1; else inactiveSection2"
-                                     (click)="publicidadDisabled(item.id)"><i class="nav-icon fas fa-user-slash"></i>
+                                    <button class="btn btn-danger btn-icon btn-sm"
+                                        *ngIf="item.estado === 1; else inactiveSection2"
+                                        (click)="publicidadDisabled(item.id)"><i class="nav-icon fas fa-user-slash"></i>
                                     </button>
                                     <ng-template #inactiveSection2>
-                                        <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.active === 2"
-                                     (click)="publicidadActive(item.id)"><i class="nav-icon fas fa-user-slash"></i>
-                                    </button>
+                                        <button class="btn btn-danger btn-icon btn-sm" *ngIf="item.estado === 2"
+                                            (click)="publicidadActive(item.id)"><i
+                                                class="nav-icon fas fa-user-slash"></i>
+                                        </button>
                                     </ng-template>
 
-                                    <button class="btn btn-danger btn-icon btn-sm" (click)="deleteUserManager(item.id)">
+                                    <button class="btn btn-danger btn-icon btn-sm" (click)="deletePublicidad(item.id)">
                                         <i class="nav-icon 	fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -184,5 +210,5 @@
                 </div>
             </div>
         </div>
-    </div>-->
+    </div>
 </div>

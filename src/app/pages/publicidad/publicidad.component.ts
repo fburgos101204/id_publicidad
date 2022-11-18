@@ -4,6 +4,8 @@ import { PublicidadService } from './publicidad.service'
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2'
+import { Publicidad } from './interface/publicidad.interface';
+import { fromEventPattern } from 'rxjs';
 declare const $: any;
 
 @Component({
@@ -17,7 +19,8 @@ export class PublicidadComponent implements OnInit {
   @ViewChild('editarUsers', { read: NgForm }) editarUsers: any;
 
 
-  allData: any
+  publicityList: Publicidad[] = [];
+  localityList: any[] = [];
   list: any[] = [];
   dataAvailable: boolean = false
   dataUnavailable: boolean = false
@@ -32,11 +35,12 @@ export class PublicidadComponent implements OnInit {
   phoneEditPass: number
 
   // Edit campos
-  nameEdit: any
-  lastNameEditSet: any
-  phoneEditSet: any
-  emailEditSet: any
-  usernameEditSet: any
+  fotoEdit: any;
+  id: any;
+  localidadEditId: any;
+  fechaInicioEdit: any;
+  fechaFinEdit: any;
+  loop: any;
 
   datosTable: any = {
     language: {
@@ -64,7 +68,6 @@ export class PublicidadComponent implements OnInit {
     }, 2000);
   }
 
-
   open(crearUser: any) {
     this.modalService.open(crearUser, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -86,57 +89,50 @@ export class PublicidadComponent implements OnInit {
     }
   }
 
-  // Crear usuario (Ready)
+  // Crear publicidad (Ready)
   createPublicidad(formData: any) {
-    console.log(formData);
+    console.log('data del formulario: ', formData);
 
-    if (formData.name == '' || formData.name == null || formData.name.trim().length < 3) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Nombre debe de tener un mínimo de 3 caracteres'
-    } else if (formData.lastName == '' || formData.lastName == null || formData.lastName.trim().length < 3) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Apellido debe de tener un mínimo de 3 caracteres'
-    } else if (formData.email == '') {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'El campo correo electrónico no puede ir vacío'
-    } else if (formData.Username == '' || formData.Username.length < 3) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Nombre de usuario debe de tener un mínimo de 3 caracteres'
-    } else if (formData.password == '' || formData.password.length < 6) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'El campo contraseña debe ser mayor o igual a 6 caracteres'
-    } else if (formData.Repetpass == '' || formData.Repetpass.length < 6) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'El campo repetir contraseña debe ser mayor o igual a 6 caracteres'
-    } else if (formData.password != formData.Repetpass) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Las contraseñas no coinciden'
+    if (formData.foto == '' || formData.foto == null) {
+      this.errorFormSaveUser = true;
+      this.errorMessageForm = 'Debes subir una foto. No puedes dejar el campo foto vacio.';
+    } else if (!formData.localidad) {
+      this.errorFormSaveUser = true;
+      this.errorMessageForm = 'Debes elegir una localidad.';
+    } else if (!formData.fechaInicio) {
+      this.errorFormSaveUser = true;
+      this.errorMessageForm = 'Debes seleccionar una fecha de inicio.';
+    } else if (!formData.fechaFin) {
+      this.errorFormSaveUser = true;
+      this.errorMessageForm = 'Debes seleccionar una fecha de fin.';
+    } else if (!formData.loop) {
+      this.errorFormSaveUser = true;
+      this.errorMessageForm = 'Debes seleccionar un loop';
     } else {
       this.publicidadService.createPublicidad(formData).subscribe({
         next: (res: any) => {
           console.log(res)
-          this.errorFormSaveUser = false
+          this.errorFormSaveUser = false;
           if (res.error == false) {
-            this.publicidadList()
-            this.modalService.dismissAll()
+            this.publicidadList();
+            this.modalService.dismissAll();
             Swal.fire(
               'Excelente!',
               res.message,
               'success'
-            )
+            );
           } else {
             Swal.fire(
               'Error!',
               res.message,
               'warning'
-            )
+            );
           }
         },
         error: (error) => {
           Swal.fire(error)
           console.log(error);
           this.showLoaderSave = false;
-          console.log('Entre aqui')
         },
       });
     }
@@ -144,65 +140,50 @@ export class PublicidadComponent implements OnInit {
 
   // Editar publicidad (Ready)
   editPublicidad(formData: any) {
-    console.log(formData);
+    console.log('editData', formData);
+    formData.id = this.id;
 
-    if (formData.nameEdit == '' || formData.nameEdit == null) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Nombre debe de tener un mínimo de 3 caracteres'
-    } else if (formData.lastNameEdit == '' || formData.lastNameEdit == null) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Apellido debe de tener un mínimo de 3 caracteres'
-    } else if (formData.email == '') {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'El campo correo electrónico no puede ir vacío'
-    } else if (formData.UsernameEdit == '') {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Nombre de usuario debe de tener un mínimo de 3 caracteres'
-    } else if (formData.password == '') {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'El campo contraseña debe ser mayor o igual a 6 caracteres'
-    } else if (formData.Repetpass == '') {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'El campo repetir contraseña debe ser mayor o igual a 6 caracteres'
-    } else if (formData.password != formData.Repetpass) {
-      this.errorFormSaveUser = true
-      this.errorMessageForm = 'Las contraseñas no coinciden'
-    } else {
-      this.publicidadService.editPublicidad(formData).subscribe({
-        next: (res: any) => {
-          console.log(res)
-          this.errorFormSaveUser = false
-          if (res.error == false) {
-            this.publicidadList()
-            this.modalService.dismissAll()
-            Swal.fire(
-              'Excelente!',
-              res.message,
-              'success'
-            )
-          } else {
-            Swal.fire(
-              'Error!',
-              res.message,
-              'warning'
-            )
-          }
-        },
-        error: (error) => {
-          Swal.fire(error)
-          console.log(error);
-          this.showLoaderSave = false;
-          console.log('Entre aqui')
-        },
-      });
+    if(!formData.fotoEdit) {
+      formData.fotoEdit = this.fotoEdit;
     }
+    console.log('editData2: ', formData);
+
+
+    this.publicidadService.editPublicidad(formData).subscribe({
+      next: (res: any) => {
+        console.log(res)
+        this.errorFormSaveUser = false
+        if (res.error == false) {
+          this.publicidadList()
+          this.modalService.dismissAll()
+          Swal.fire(
+            'Excelente!',
+            res.message,
+            'success'
+          )
+        } else {
+          Swal.fire(
+            'Error!',
+            res.message,
+            'warning'
+          )
+        }
+      },
+      error: (error) => {
+        this.modalService.dismissAll()
+        Swal.fire(error)
+        console.log(error);
+        this.showLoaderSave = false;
+        console.log('Entre aqui')
+      },
+    });
   }
 
   // Listado de localidades
   listLocalidad() {
     this.publicidadService.listLocalidad().subscribe({
       next: (data: any) => {
-        this.allData = data
+        this.localityList = data
         console.log(data)
         if (!data || data == '' || data == '[]') {
           this.dataAvailable = false
@@ -229,10 +210,12 @@ export class PublicidadComponent implements OnInit {
   publicidadList() {
     this.publicidadService.publicidadList().subscribe({
       next: (data: any) => {
-        this.allData = data
+        this.publicityList = data;
+        debugger;
         console.log(data)
       },
       error: (error) => {
+        debugger;
         console.log('Error: ')
         console.log(error)
       },
@@ -337,16 +320,18 @@ export class PublicidadComponent implements OnInit {
   };
 
   // Rellenar campos para editar (Ready)
-  refillEditUser(data: any) {
-    this.nameEdit = data.name
-    this.lastNameEditSet = data.lastName
-    this.phoneEditSet = data.phoneNumber
-    this.emailEditSet = data.email.trim()
-    this.usernameEditSet = data.username
+  refillEditPublicity(data: any) {
+    console.log('refillDate', data);
+    this.localidadEditId = data.id_localidad;
+    this.fechaInicioEdit = data.fecha_inicio;
+    this.fechaFinEdit = data.fecha_vencimiento;
+    this.loop = data.loope;
+    this.id = data.id;
+    this.fotoEdit = data.foto;
   }
 
   // Eliminar publicidad 
-  /*deletePublicidad(id: number) {
+  deletePublicidad(id: number) {
     Swal.fire({
       title: 'Alerta!',
       text: "Seguro que quieres eliminar esta publicidad ?",
@@ -381,7 +366,5 @@ export class PublicidadComponent implements OnInit {
 
       }
     })
-  }*/
-
-
+  }
 }
